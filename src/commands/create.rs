@@ -2,12 +2,7 @@ use super::{Error, Result};
 use clap::Clap;
 use gma::{AddonTag, AddonType};
 use serde::Deserialize;
-use std::{
-    convert::TryFrom,
-    fs::File,
-    io::{BufReader, BufWriter},
-    path::{Path, PathBuf},
-};
+use std::{convert::TryFrom, fs::File, io::BufWriter, path::PathBuf};
 use wildmatch::WildMatch;
 
 impl From<walkdir::Error> for Error {
@@ -71,7 +66,10 @@ impl AddonJson {
     }
 }
 
-/// Uncompresses a given .gma file
+/// Creates a .gma file from a folder
+///
+/// The folder should have the standard addon folder structure
+/// https://wiki.facepunch.com/gmod/Workshop_Addon_Creation
 #[derive(Clap)]
 pub struct Config {
     /// The directory where addon is

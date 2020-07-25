@@ -1,12 +1,7 @@
 use super::Result;
 use clap::Clap;
-use lzma_rs;
-use std::{
-    fs::File,
-    io::{BufReader, BufWriter},
-};
 
-/// Uncompresses a given .gma file
+/// Prints information about a .gma file
 #[derive(Clap)]
 pub struct Config {
     /// The file to list
@@ -24,5 +19,10 @@ pub fn run(cfg: Config) -> Result<()> {
     println!("Addon Type\t\t: {:?}", archive.addon_tags());
     println!("Author name\t\t: {}", archive.author());
     println!("Compressed\t\t: {}", archive.compressed());
+    println!("Number of files\t\t: {}", archive.entries().count());
+    println!(
+        "Total files size\t: {}",
+        archive.entries().map(|e| e.size()).sum::<u64>()
+    );
     Ok(())
 }

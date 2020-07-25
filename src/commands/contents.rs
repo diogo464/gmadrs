@@ -1,12 +1,7 @@
-use super::Result;
+use super::{Error, Result};
 use clap::Clap;
-use lzma_rs;
-use std::{
-    fs::File,
-    io::{BufReader, BufWriter},
-};
 
-/// Uncompresses a given .gma file
+/// Writes the contents of a file inside the archive to stdout
 #[derive(Clap)]
 pub struct Config {
     /// The gma file
@@ -28,9 +23,7 @@ pub fn run(cfg: Config) -> Result<()> {
             Ok(())
         })??;
     } else {
-        //TODO : this has to be error
-        println!("File '{}' not found in archive", cfg.file_to_output);
+        return Err(Error::FileNotInArchive(cfg.file_to_output));
     }
-
     Ok(())
 }

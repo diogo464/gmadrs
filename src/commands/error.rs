@@ -1,5 +1,6 @@
 use gma;
 use lzma_rs;
+use std::fmt::Display;
 
 #[derive(Debug)]
 pub enum Error {
@@ -8,6 +9,7 @@ pub enum Error {
     GMAError(gma::Error),
     InvalidAddonJson(String),
     ToManyAddonTags,
+    FileNotInArchive(String),
     Custom(Box<dyn std::error::Error>),
 }
 
@@ -28,5 +30,23 @@ impl From<gma::Error> for Error {
         Self::GMAError(e)
     }
 }
+
+impl Display for Error {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::IOError(e) => e.fmt(f),
+            Self::CompressionError(e) => write!(f, "Compression error : {:?}", e),
+            Self::GMAError(e) => e.fmt(f),
+            Self::InvalidAddonJson(m) => write!(f, "{}", m),
+            Self::ToManyAddonTags => write!(f, "Only 2 tags are allowed on the addon"),
+            Self::FileNotInArchive(filename) => {
+                write!(f, "The file '{}' was not in the archive", filename)
+            }
+            Self::Custom(e) => e.fmt(f),
+        }
+    }
+}
+
+impl std::error::Error for Error {}
 
 pub type Result<T, E = Error> = std::result::Result<T, E>;

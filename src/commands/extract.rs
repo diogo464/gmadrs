@@ -1,17 +1,16 @@
 use super::Result;
 use clap::Clap;
-use lzma_rs;
 use std::{
     fs::File,
-    io::{BufReader, BufWriter},
+    io::BufWriter,
     path::{Path, PathBuf},
 };
-/// Uncompresses a given .gma file
+/// Extracts a .gma file
 #[derive(Clap)]
 pub struct Config {
     /// The file to decompress
     file: String,
-    /// The output director
+    /// The output directory
     #[clap(short, long)]
     dir: Option<String>,
 }
@@ -46,7 +45,7 @@ pub fn run(cfg: Config) -> Result<()> {
         std::fs::create_dir_all(&filepath.parent().expect("It should have a parent"))?;
         let file = File::create(filepath)?;
         let mut writer = BufWriter::new(file);
-        archive.read_entry(entry, |_, r| std::io::copy(r, &mut writer))?;
+        archive.read_entry(entry, |_, r| std::io::copy(r, &mut writer))??;
     }
 
     Ok(())

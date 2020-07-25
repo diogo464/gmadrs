@@ -6,11 +6,11 @@ use clap::Clap;
 /// This doc string acts as a help message when the user runs '--help'
 /// as do all doc strings on fields
 #[derive(Clap)]
-#[clap(version = "1.0", author = "Kevin K. <kbknapp@gmail.com>")]
+#[clap(version = "0.1.0", author = "diogo464")]
 struct Params {
     /// A level of verbosity, and can be used multiple times
     #[clap(short, long, parse(from_occurrences))]
-    verbose: i32,
+    _verbose: i32,
     #[clap(subcommand)]
     subcmd: SubCommand,
 }
@@ -38,4 +38,11 @@ fn main() {
         SubCommand::Info(c) => info::run(c),
         SubCommand::Contents(c) => contents::run(c),
     };
+
+    if let Err(e) = result {
+        print!("{}", e);
+        std::process::exit(-1);
+    } else {
+        std::process::exit(0);
+    }
 }

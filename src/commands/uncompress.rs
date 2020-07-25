@@ -6,6 +6,8 @@ use std::{
     io::{BufReader, BufWriter},
 };
 
+//TODO: add option to remove old file
+
 /// Uncompresses a given .gma file
 #[derive(Clap)]
 pub struct Config {
@@ -17,10 +19,12 @@ pub struct Config {
 }
 
 pub fn run(cfg: Config) -> Result<()> {
-    let infile = File::open(cfg.file.clone())?;
+    let compressed_file_new_name = cfg.file.clone() + "_compressed";
+    std::fs::rename(&cfg.file, &compressed_file_new_name)?;
+    let infile = File::open(&compressed_file_new_name)?;
     let mut inreader = BufReader::new(infile);
 
-    let outfile = File::create(cfg.output.unwrap_or(cfg.file.clone() + "_uncompressed"))?;
+    let outfile = File::create(cfg.output.unwrap_or(cfg.file))?;
     let mut outwriter = BufWriter::new(outfile);
 
     lzma_rs::lzma_decompress(&mut inreader, &mut outwriter)?;

@@ -6,7 +6,7 @@ use std::{
     io::{BufReader, BufWriter},
 };
 
-/// Uncompresses a given .gma file
+/// Compresses a given .gma file
 #[derive(Clap)]
 pub struct Config {
     /// The file to decompress
