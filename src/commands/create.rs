@@ -1,7 +1,7 @@
 use super::{Error, Result};
 use clap::Clap;
 use gma::{AddonTag, AddonType};
-use serde::Deserialize;
+use nanoserde::DeJson;
 use std::{convert::TryFrom, fs::File, io::BufWriter, path::PathBuf};
 use wildmatch::WildMatch;
 
@@ -15,12 +15,12 @@ impl From<walkdir::Error> for Error {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, DeJson)]
 struct AddonJsonRaw {
     title: String,
     description: Option<String>,
     author: Option<String>,
-    #[serde(rename = "type")]
+    #[nserde(rename = "type")]
     ty: String,
     tags: Vec<String>,
     ignore: Vec<String>,
@@ -37,7 +37,7 @@ struct AddonJson {
 
 impl AddonJson {
     fn from_str(string: &str) -> Result<Self> {
-        let raw: AddonJsonRaw = serde_json::from_str(&string)
+        let raw = AddonJsonRaw::deserialize_json(&string)
             .map_err(|e| Error::InvalidAddonJson(format!("Invalid addon.json file : {}", e)))?;
 
         if raw.tags.len() > 2 {
