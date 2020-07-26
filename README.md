@@ -1,5 +1,6 @@
 # GMADRS
 ![Rust](https://github.com/diogo464/gmadrs/workflows/Rust/badge.svg)
+[![Crates.io version](https://img.shields.io/crates/v/gmadrs.svg)](https://crates.io/crates/gmadrs)
 
 Command line utility to interact with .gma files, garry's mod addons.
 
