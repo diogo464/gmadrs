@@ -174,13 +174,14 @@ gmadrs-uncompress
 Uncompresses a given .gma file
 
 USAGE:
-    gmadrs uncompress [OPTIONS] <file>
+    gmadrs uncompress [FLAGS] [OPTIONS] <file>
 
 ARGS:
     <file>    The file to decompress
 
 FLAGS:
     -h, --help       Prints help information
+        --rm         Removes the old file after decompression
     -V, --version    Prints version information
 
 OPTIONS:
