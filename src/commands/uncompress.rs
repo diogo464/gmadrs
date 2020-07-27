@@ -16,6 +16,9 @@ pub struct Config {
     /// The output file name
     #[clap(short, long)]
     output: Option<String>,
+    /// Removes the old file after decompression
+    #[clap(long)]
+    rm: bool,
 }
 
 pub fn run(cfg: Config) -> Result<()> {
@@ -28,6 +31,10 @@ pub fn run(cfg: Config) -> Result<()> {
     let mut outwriter = BufWriter::new(outfile);
 
     lzma_rs::lzma_decompress(&mut inreader, &mut outwriter)?;
+
+    if cfg.rm {
+        std::fs::remove_file(compressed_file_new_name)?;
+    }
 
     Ok(())
 }
